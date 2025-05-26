@@ -1,0 +1,12 @@
+.contact-list {
+  margin-top: 20px;
+  max-width: 1280px;
+}
+
+.contact-list ul {
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  gap: 10px;
+}

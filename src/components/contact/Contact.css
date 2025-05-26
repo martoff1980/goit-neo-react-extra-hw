@@ -1,0 +1,35 @@
+.contact-item {
+  width: 330px;
+  height: 80px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline;
+  border: 3px solid black;
+}
+
+.contact-item button {
+  width: 80px;
+  height: 40px;
+  border: 1px solid black;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.contact-info {
+  margin: auto 10px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+}
+
+.contact-info div svg {
+  padding-right: 10px;
+}
+
+.contact-actions {
+  display: block;
+  padding: 20px;
+}
