@@ -5,7 +5,7 @@ import { deleteContact } from '../../redux/contacts/operations';
 import ModalDelete from '../ModalUI/ModalDelete';
 import ModalEdit from '../ModalUI/ModalEdit';
 import './Contact.css';
-
+//
 const Contact = ({ contact }) => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
