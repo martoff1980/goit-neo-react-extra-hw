@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
-import Contact from '../Contact/Contact';
+import Contact from '../contact/Contact';
 import {
   selectFilteredContacts,
   selectFilteredContactsByPhone,
