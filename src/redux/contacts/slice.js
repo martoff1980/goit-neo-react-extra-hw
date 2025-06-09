@@ -1,13 +1,18 @@
 import { useSelector } from 'react-redux';
 import { createSlice, createSelector } from '@reduxjs/toolkit';
-import { fetchContacts, addContact, deleteContact } from './operations';
-import { selectNameFilter } from '../filters/slice';
+import {
+  fetchContacts,
+  addContact,
+  editContact,
+  deleteContact,
+} from './operations';
+import { selectNameFilter, selectPhoneFilter } from '../filters/selectors';
 
 const initialState = {
   items: [],
   loading: false,
   error: null,
-}
+};
 
 const contactsSlice = createSlice({
   name: 'contacts',
@@ -38,6 +43,23 @@ const contactsSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
+      .addCase(editContact.pending, state => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(editContact.fulfilled, (state, action) => {
+        const updated = action.payload;
+        const index = state.items.findIndex(c => c.id === updated.id);
+        if (index !== -1) {
+          state.items[index] = updated;
+        }
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(editContact.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
       .addCase(deleteContact.pending, state => {
         state.loading = true;
         state.error = null;
@@ -53,8 +75,6 @@ const contactsSlice = createSlice({
   },
 });
 
-
-
 export const selectContacts = state => state.contacts.items;
 export const selectLoading = state => state.contacts.loading;
 export const selectError = state => state.contacts.error;
@@ -66,6 +86,14 @@ export const selectFilteredContacts = createSelector(
       contact.name.toLowerCase().includes(nameFilter.toLowerCase())
     )
 );
+
+export const selectFilteredContactsByPhone = createSelector(
+  [selectContacts, selectPhoneFilter],
+  (contacts, phoneFilter) =>
+    contacts.filter(contact => contact.number.includes(phoneFilter))
+);
+
+export const selectFilterBy = state => state.filters.filtredBy;
 
 const contactsSliceReducer = contactsSlice.reducer;
 export default contactsSliceReducer;

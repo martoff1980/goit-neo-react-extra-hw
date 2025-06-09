@@ -1,4 +1,4 @@
- import { Box, Typography, Container, Paper, useTheme } from '@mui/material';
+import { Box, Typography, Container, Paper, useTheme } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 import { selectIsLoggedIn } from '../../redux/auth/selectors';
@@ -11,7 +11,6 @@ const LoginPage = () => {
 
   if (isLoggedIn) {
     return <Navigate to="/contacts" replace />;
-
   }
 
   return (

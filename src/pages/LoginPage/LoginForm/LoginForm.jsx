@@ -1,11 +1,21 @@
-import { useDispatch } from 'react-redux';
-import { authLogIn } from '../../../redux/auth/operations';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  authLogIn,
+  refreshUser,
+  register,
+} from '../../../redux/auth/operations';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { TextField, Button, Box } from '@mui/material';
+import {
+  selectIsLoggedIn,
+  selectIsRefreshing,
+} from '../../../redux/auth/selectors';
 
 const LoginForm = () => {
   const dispatch = useDispatch();
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+  const isRefreshing = useSelector(selectIsRefreshing);
 
   const initialValues = {
     email: '',
@@ -20,7 +30,13 @@ const LoginForm = () => {
   });
 
   const handleSubmit = (values, { setSubmitting }) => {
+    if (isLoggedIn) {
+      dispatch(refreshUser(values));
+      setSubmitting(false);
+      return;
+    }
     dispatch(authLogIn(values));
+
     setSubmitting(false);
   };
 

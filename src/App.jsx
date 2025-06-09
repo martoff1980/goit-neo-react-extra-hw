@@ -1,64 +1,94 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { useEffect, lazy } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect, useState, lazy } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
 import Layout from './components/Layout/Layout';
-import PrivateRoute from './components/PrivateRoute/PrivateRoute'
-import RestrictedRoute from './components/RestrictedRoute/RestrictedRoute'
-// import ContactForm from './components/contactForm/ContactForm';
-// import SearchBox from './components/searchBox/SearchBox';
-// import ContactList from './components/ContactList/ContactList';
-import {logIn, fetchContacts } from './redux/contacts/operations';
+import PrivateRoute from './components/PrivateRoute/PrivateRoute';
+import PublicRoute from './components/PublicRoute/PublicRoute';
+import RestrictedRoute from './components/RestrictedRoute/RestrictedRoute';
+
+import { fetchContacts } from './redux/contacts/operations';
+import { refreshUser } from './redux/auth/operations';
+// import { logout } from './redux/auth/slice';
+import {
+  selectAuth,
+  selectIsLoggedIn,
+  selectIsRefreshing,
+} from './redux/auth/selectors';
+
+import { toast, Toaster } from 'react-hot-toast';
+
 import './App.css';
 
 const HomePage = lazy(() => import('./pages/HomePage'));
-const RegistrationPage = lazy(() => import('./pages/RegistrationPage/RegistrationPage'));
+const RegistrationPage = lazy(() =>
+  import('./pages/RegistrationPage/RegistrationPage')
+);
 const LoginPage = lazy(() => import('./pages/LoginPage/LoginPage'));
 const ContactsPage = lazy(() => import('./pages/ContactsPage'));
-
-  const App = () => {
+const ContactForm = lazy(() => import('./components/СontactForm/ContactForm'));
+const App = () => {
   const dispatch = useDispatch();
 
-  // const loginData = {
-  //     email: "8900876@mail.com",
-  //     password: "examplepwd12345",
-  //   };
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+  const isRefreshing = useSelector(selectIsRefreshing);
 
-  // useEffect(() => {
-  //   dispatch(logIn(loginData));
-  // }, [dispatch]);
+  useEffect(() => {
+    if (!isRefreshing && isLoggedIn) {
+      toast.success('User authorizated! ✅');
+    }
+  }, [isRefreshing, isLoggedIn]);
 
   useEffect(() => {
     dispatch(fetchContacts());
   }, [dispatch]);
 
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      dispatch(refreshUser(token));
+    }
+  }, [dispatch]);
+
+  // if (isRefreshing) {
+  //   return <p>Завантаження...</p>;
+  // }
+
   return (
     <>
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route
-        path="/contacts"
-        element={
-          <PrivateRoute component={ContactsPage} redirectTo="/login" />
-        }
-      />
-       <Route
-          path="/login"
-          element={
-            <RestrictedRoute redirectTo="/contacts">
-              <LoginPage />
-            </RestrictedRoute>
-          }
-        />
-       <Route path='/register' element={<RegistrationPage />}/>
-    </Routes>
-    
-      {/* <div className="container">
-        <h1>Phonebook</h1>
-        <ContactForm />
-        <SearchBox />
-        <ContactList />
-      </div> */}
+      <Toaster position="buttom-right"></Toaster>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<HomePage />} />
+          <Route
+            path="/register"
+            element={
+              <PublicRoute
+                redirectTo="/contacts"
+                component={RegistrationPage}
+              />
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <PublicRoute redirectTo="/contacts" component={LoginPage} />
+            }
+          />
+          <Route
+            path="/contacts"
+            element={
+              <PrivateRoute redirectTo="/login" component={ContactsPage} />
+            }
+          />
+          <Route
+            path="/addcontact"
+            element={
+              <PrivateRoute redirectTo="/login" component={ContactForm} />
+            }
+          />
+        </Route>
+      </Routes>
     </>
   );
 };

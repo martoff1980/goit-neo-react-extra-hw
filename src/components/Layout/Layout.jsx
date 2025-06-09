@@ -13,6 +13,7 @@ const Layout = () => {
     <>
       <CssBaseline />
       <Box
+        name="LayoutContainer"
         sx={{
           display: 'flex',
           flexDirection: 'column',
@@ -21,8 +22,9 @@ const Layout = () => {
         }}
       >
         <AppBar />
-        
+
         <Container
+          name="MainContent"
           component="main"
           maxWidth="lg"
           sx={{
@@ -49,12 +51,13 @@ const Layout = () => {
         </Container>
 
         <Box
+          name="FooterContainer"
           component="footer"
           sx={{
             py: 3,
             px: 2,
             mt: 'auto',
-            backgroundColor: (theme) =>
+            backgroundColor: theme =>
               theme.palette.mode === 'light'
                 ? theme.palette.grey[200]
                 : theme.palette.grey[800],

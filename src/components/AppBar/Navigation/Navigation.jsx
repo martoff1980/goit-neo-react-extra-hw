@@ -1,11 +1,8 @@
 import { NavLink } from 'react-router-dom';
 import { Button, Box, useTheme } from '@mui/material';
-import { useSelector } from 'react-redux';
-import { selectIsLoggedIn } from '../../../redux/auth/selectors';
 
 const Navigation = () => {
   const theme = useTheme();
-  const isLoggedIn = useSelector(selectIsLoggedIn);
 
   // Style for active NavLink
   const activeStyle = {
@@ -13,7 +10,7 @@ const Navigation = () => {
     backgroundColor: theme.palette.primary.dark,
     '&:hover': {
       backgroundColor: theme.palette.primary.dark,
-    }
+    },
   };
 
   return (
@@ -23,24 +20,22 @@ const Navigation = () => {
         to="/"
         sx={{
           color: theme.palette.primary.contrastText,
-          '&.active': activeStyle
+          '&.active': activeStyle,
         }}
       >
         Home
       </Button>
 
-      {isLoggedIn && (
-        <Button
-          component={NavLink}
-          to="/contacts"
-          sx={{
-            color: theme.palette.primary.contrastText,
-            '&.active': activeStyle
-          }}
-        >
-          Contacts
-        </Button>
-      )}
+      <Button
+        component={NavLink}
+        to="/contacts"
+        sx={{
+          color: theme.palette.primary.contrastText,
+          '&.active': activeStyle,
+        }}
+      >
+        Contacts
+      </Button>
     </Box>
   );
 };
