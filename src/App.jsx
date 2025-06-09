@@ -9,7 +9,6 @@ import RestrictedRoute from './components/RestrictedRoute/RestrictedRoute';
 
 import { fetchContacts } from './redux/contacts/operations';
 import { refreshUser } from './redux/auth/operations';
-// import { logout } from './redux/auth/slice';
 import {
   selectAuth,
   selectIsLoggedIn,
