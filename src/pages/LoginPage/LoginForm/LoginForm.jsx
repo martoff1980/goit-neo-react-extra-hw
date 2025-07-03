@@ -1,9 +1,12 @@
+import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
+import { useEffect, useState, lazy } from 'react';
 import {
   authLogIn,
   refreshUser,
   register,
 } from '../../../redux/auth/operations';
+import { fetchContacts } from '../../../redux/contacts/operations';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { TextField, Button, Box } from '@mui/material';
@@ -22,6 +25,10 @@ const LoginForm = () => {
     password: '',
   };
 
+  // useEffect(() => {
+  //   dispatch(fetchContacts());
+  // }, [dispatch]);
+
   const validationSchema = Yup.object({
     email: Yup.string().email('Invalid email address').required('Required'),
     password: Yup.string()
@@ -35,8 +42,8 @@ const LoginForm = () => {
       setSubmitting(false);
       return;
     }
-    dispatch(authLogIn(values));
 
+    dispatch(authLogIn(values));
     setSubmitting(false);
   };
 

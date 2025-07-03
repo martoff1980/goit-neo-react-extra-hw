@@ -7,6 +7,7 @@ import {
   changeFilterBy,
 } from '../../redux/filters/slice';
 import { FaSearch, FaTimes, FaUser, FaPhone } from 'react-icons/fa';
+
 const SearchBox3 = () => {
   const dispatch = useDispatch();
 

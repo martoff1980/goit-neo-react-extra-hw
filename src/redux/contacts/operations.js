@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { toast } from 'react-hot-toast';
+import { setAuthHeader, clearAuthHeader } from '../auth/operations';
 
 axios.defaults.baseURL = 'https://connections-api.goit.global';
 
@@ -10,11 +11,9 @@ export const fetchContacts = createAsyncThunk(
     const token = localStorage.getItem('token');
 
     try {
-      const res = await axios.get('/contacts', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      setAuthHeader(token);
+      const res = await axios.get('/contacts');
+
       return res.data;
     } catch (e) {
       toast.error(`${e.message}. 🔴`);
@@ -29,11 +28,8 @@ export const addContact = createAsyncThunk(
     const token = localStorage.getItem('token');
 
     try {
-      const res = await axios.post('/contacts', contact, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      setAuthHeader(token);
+      const res = await axios.post('/contacts', contact);
 
       toast.success('Contact added. 📄');
       return res.data;
@@ -48,7 +44,6 @@ export const editContact = createAsyncThunk(
   'contacts/editContact',
   async (contact, thunkAPI) => {
     const token = localStorage.getItem('token');
-    // console.log('Get token', token);
 
     const body = {
       name: contact.name,
@@ -56,11 +51,8 @@ export const editContact = createAsyncThunk(
     };
 
     try {
-      const res = await axios.patch(`/contacts/${contact.id}`, body, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      setAuthHeader(token);
+      const res = await axios.patch(`/contacts/${contact.id}`, body);
 
       toast.success('Contact saved. 💾');
       return res.data;
@@ -75,14 +67,10 @@ export const deleteContact = createAsyncThunk(
   'contacts/deleteContact',
   async (contactId, thunkAPI) => {
     const token = localStorage.getItem('token');
-    // console.log('Get token',token);
 
     try {
-      await axios.delete(`/contacts/${contactId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      setAuthHeader(token);
+      await axios.delete(`/contacts/${contactId}`);
 
       toast.success('Contact deleted. 🗑️');
       return contactId;

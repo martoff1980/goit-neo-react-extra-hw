@@ -39,15 +39,18 @@ const App = () => {
   }, [isRefreshing, isLoggedIn]);
 
   useEffect(() => {
-    dispatch(fetchContacts());
-  }, [dispatch]);
-
-  useEffect(() => {
     const token = localStorage.getItem('token');
+
     if (token) {
       dispatch(refreshUser(token));
     }
   }, [dispatch]);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      dispatch(fetchContacts());
+    }
+  }, [dispatch, isLoggedIn]);
 
   // if (isRefreshing) {
   //   return <p>Завантаження...</p>;

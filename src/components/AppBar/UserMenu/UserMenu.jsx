@@ -1,4 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
+import { authLogOut } from '../../../redux/auth/operations';
 import { logout } from '../../../redux/auth/slice';
 import { selectAuth } from '../../../redux/auth/selectors';
 import { persistor } from '../../../redux/store';
@@ -15,8 +16,9 @@ const UserMenu = () => {
   const handleLogOut = () => {
     dispatch(logout());
     persistor.purge();
-    // alert('You have been logged out successfully!');
     toast.success('You have been logged out successfully! ✅');
+
+    dispatch(authLogOut());
   };
 
   return (

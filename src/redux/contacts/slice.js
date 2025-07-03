@@ -1,5 +1,6 @@
 import { useSelector } from 'react-redux';
 import { createSlice, createSelector } from '@reduxjs/toolkit';
+import { authLogOut } from '../auth/operations';
 import {
   fetchContacts,
   addContact,
@@ -71,6 +72,13 @@ const contactsSlice = createSlice({
       .addCase(deleteContact.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+
+      // Критично важлива частина — очищення контактів при виході
+      .addCase(authLogOut.fulfilled, state => {
+        state.loading = false;
+        state.error = null;
+        state.items = [];
       });
   },
 });
